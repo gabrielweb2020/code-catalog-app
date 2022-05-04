@@ -1,6 +1,11 @@
 import {Entity, model, property} from '@loopback/repository';
+export interface SmallCategory {
+  id: string;
+  name: string;
+  is_active: boolean;
+}
 
-@model({settings: {strict: false}})
+@model() //Metadata
 export class Category extends Entity {
   @property({
     type: 'string',
@@ -13,19 +18,41 @@ export class Category extends Entity {
   @property({
     type: 'string',
     required: true,
+    jsonSchema: {
+      minLength: 1,
+      maxLength: 255,
+    },
   })
   name: string;
 
   @property({
     type: 'string',
+    required: false,
+    jsonSchema: {
+      nullable: true,
+    },
+    default: null,
   })
-  description?: string;
+  description: string;
 
-  // Define well-known properties here
+  @property({
+    type: 'boolean',
+    required: false,
+    default: true,
+  })
+  is_active: boolean;
 
-  // Indexer property to allow additional data
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [prop: string]: any;
+  @property({
+    type: 'date',
+    required: true,
+  })
+  created_at: string; //iso 8601 YYYY-MM-DDT00:00:00
+
+  @property({
+    type: 'date',
+    required: true,
+  })
+  updated_at: string;
 
   constructor(data?: Partial<Category>) {
     super(data);
